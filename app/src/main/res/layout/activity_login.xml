@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txtEmailLogin"
+        android:text="@string/txtEmail"
         android:textColor="@color/colorPrimaryText"/>
     <EditText
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txtSenhaLogin"
+        android:text="@string/txtSenha"
         android:textColor="@color/colorPrimaryText"
         />
 

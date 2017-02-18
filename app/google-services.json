@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "82317797549",
+    "firebase_url": "https://helpapp-246c8.firebaseio.com",
+    "project_id": "helpapp-246c8",
+    "storage_bucket": "helpapp-246c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82317797549:android:0de026135f383885",
+        "android_client_info": {
+          "package_name": "dcc.ufla.br.helpapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "82317797549-4m2o2bel5hrlt05imul7b46e5vknpi6m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLlYamYpuWGAtvfN6JFN-iAZ4i0rVRltY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

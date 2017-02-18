@@ -1,9 +1,15 @@
 <resources>
     <string name="app_name">HelpApp</string>
-    <string name="txtEmailLogin">Email</string>
-    <string name="txtSenhaLogin">Senha</string>
+    <string name="txtEmail">Email</string>
+    <string name="txtSenha">Senha</string>
     <string name="btnEntrarLogin">Entrar</string>
-    <string name="txtCadastrarLogin">Não é cadastrado? Toque para cadastrar</string>
+    <string name="txtCadastrarLogin">Não é cadastrado? toque aqui para cadastrar</string>
     <string name="btnCadastrarLogin">Cadastrar</string>
+    <string name="txtCadastrarTela">Insira algumas informações para realizarmos seu cadastro</string>
+    <string name="txtNome">Nome</string>
+    <string name="txtIdade">Idade</string>
+    <string name="txtRepetirSenha">Confirme sua senha</string>
+    <string name="txtEndereco">Endereço</string>
+    <string name="txtConfirmarCadastro">Confirmar</string>
 
 </resources>
