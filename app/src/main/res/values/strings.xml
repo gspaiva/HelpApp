@@ -11,5 +11,6 @@
     <string name="txtRepetirSenha">Confirme sua senha</string>
     <string name="txtEndereco">Endereço</string>
     <string name="txtConfirmarCadastro">Confirmar</string>
+    <string name="title_activity_help_maps">"Mapa de ajuda"</string>
 
 </resources>
