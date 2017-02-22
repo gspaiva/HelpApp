@@ -42,6 +42,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity{
 
         getSupportActionBar().setTitle("Cadastro de usuário");
 
+
         //get instance
         auth  = FirebaseAuth.getInstance();
 
@@ -59,33 +60,33 @@ public class CadastrarUsuarioActivity extends AppCompatActivity{
 
                 //validar campos antes de mandar
 
-                User user = new User(edtNome.getText().toString(),edtEmail.getText().toString(),edtSenha.getText().toString()
+                final User user = new User(edtNome.getText().toString(),edtEmail.getText().toString(),edtSenha.getText().toString()
                 ,edtEndereco.getText().toString());
 
                 auth.createUserWithEmailAndPassword(user.email,user.senha).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.v("TAG",e.getMessage());
+
                     }
                 }).addOnCompleteListener(CadastrarUsuarioActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.v("TAG","QUE TA CONTENCENDO00");
-                                Toast.makeText(CadastrarUsuarioActivity.this,"Dados salvos com sucesso" + String.valueOf(task.isSuccessful()),Toast.LENGTH_SHORT).show();
 
+                                DatabaseReference usersRef = mRootRef.child("users");
+                                usersRef.push().setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(getBaseContext(),"Dados salvos com sucesso" ,Toast.LENGTH_SHORT).show();
+                                        Intent i = new Intent(CadastrarUsuarioActivity.this, LoginActivity.class);
+                                        startActivity(i);
+                                    }
+
+                                });
                             }
                         });
 
-                /*
-                //passa os dados pro banco de dados
-                DatabaseReference usersRef = mRootRef.child("users");
-                usersRef.push().setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getBaseContext(),"Dados salvos com sucesso" + String.valueOf(task.isSuccessful()),Toast.LENGTH_SHORT).show();
-                    }
 
-                });*/
+
 
 
             }

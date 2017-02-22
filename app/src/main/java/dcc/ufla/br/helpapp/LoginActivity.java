@@ -79,17 +79,16 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
                             progressDialog.dismiss();
-
-
-
+                            //mensagem do validador que ainda será implementado
                             Toast.makeText(LoginActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
 
                         }
                         else{
-                            //Intent i = new Intent (LoginActivity.this, DashActivity.class);
+
                             progressDialog.dismiss();
                             Toast.makeText(LoginActivity.this,"Logado com sucesso" ,Toast.LENGTH_SHORT).show();
-                            //startActivity(
+                            Intent i = new Intent(LoginActivity.this,DashboardActivity.class);
+                            startActivity(i);
                         }
                     }
                 });

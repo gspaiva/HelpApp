@@ -12,5 +12,10 @@
     <string name="txtEndereco">Endereço</string>
     <string name="txtConfirmarCadastro">Confirmar</string>
     <string name="title_activity_help_maps">"Mapa de ajuda"</string>
+    <string name="txtBemVindo">"Bem vindo(a) ao Help App!"</string>
+    <string name="txtExpMapa">Para adicionar um ponto no mapa de ajuda, clique no botão abaixo</string>
+    <string name="txtExpVerMapa">Para ver os locais que tem pessoas necessitadas, clique no botão abaixo</string>
+    <string name="btnAddPontoMapa">Adicionar local ao mapa</string>
+    <string name="btnVerPontosMapa">Ver locais </string>
 
 </resources>
