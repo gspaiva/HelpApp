@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView txtCadastrarLogin;
     FirebaseAuth auth;
     ProgressDialog progressDialog;
-    public static final  Pattern ValidEmail = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +60,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(!validEmail(edtEmail.getText().toString())){
+                if(!Validator.validEmail(edtEmail.getText().toString())){
                     edtEmail.setError("Seu email está inválido: exemplo@exemplo.com é válido");
                     return;
                 }
 
-                if(!validSenha(edtSenha.getText().toString())){
+                if(!Validator.validSenha(edtSenha.getText().toString())){
                     edtSenha.setError("Sua senha deve ter no mínimo 6 caracteres ...");
                     return;
                 }
@@ -79,8 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
                             progressDialog.dismiss();
-                            //mensagem do validador que ainda será implementado
-                            Toast.makeText(LoginActivity.this,task.getException().getMessage(),Toast.LENGTH_LONG).show();
+
+                            Toast.makeText(LoginActivity.this,Validator.typeErrorLogin(task.getException().getMessage()),Toast.LENGTH_LONG).show();
 
                         }
                         else{
@@ -89,6 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this,"Logado com sucesso" ,Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(LoginActivity.this,DashboardActivity.class);
                             startActivity(i);
+                            finish();
+
                         }
                     }
                 });
@@ -96,16 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-    public static boolean validEmail(String email){
-        Matcher matcher  = ValidEmail.matcher(email);
-        return matcher.find();
-    }
-    public static boolean validSenha(String senha){
-        if(senha.length() > 5)
-            return true;
 
-        return false;
-    }
 
 
 }

@@ -1,8 +1,11 @@
 package dcc.ufla.br.helpapp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +33,8 @@ public class DashboardActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private ProgressDialog progressDialog;
     private Drawer drawer;
+    private Button btnAddPontoMapa;
+    private Button btnVerPontosMapa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,10 @@ public class DashboardActivity extends AppCompatActivity {
         drawer = new DrawerBuilder().withActionBarDrawerToggle(true).withActivity(this).addDrawerItems(new PrimaryDrawerItem().withIdentifier(1).withName("Logout")).build();
 
         //get the instance of the textview
+
         txtBemvindo = (TextView)findViewById(R.id.txtBemvindo);
+        btnAddPontoMapa = (Button)findViewById(R.id.btnAddPontoMapa);
+        btnVerPontosMapa = (Button)findViewById(R.id.btnVerPontosMapa);
 
         //get instance of auth
 
@@ -82,6 +90,24 @@ public class DashboardActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+        btnAddPontoMapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DashboardActivity.this,HelpMapsActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btnVerPontosMapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
 
     }
