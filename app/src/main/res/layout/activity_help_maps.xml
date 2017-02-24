@@ -9,7 +9,8 @@
         tools:context="dcc.ufla.br.helpapp.HelpMapsActivity" >
 
         <Button
-            android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:layout_width="150dp"
             android:id="@+id/btnAddMeuLocal"
             android:layout_height="wrap_content" android:text="Adicionar meu local" />
 

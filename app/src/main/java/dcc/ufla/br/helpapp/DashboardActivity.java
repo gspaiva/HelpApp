@@ -34,29 +34,24 @@ public class DashboardActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Drawer drawer;
     private Button btnAddPontoMapa;
-    private Button btnVerPontosMapa;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        getSupportActionBar().setTitle("Help app - Dashboard");
+        getSupportActionBar().setTitle("Painel de controle");
         //iniatilizing the progress dialog
         progressDialog = new ProgressDialog(DashboardActivity.this);
         progressDialog.setMessage("Carregando dados");
         progressDialog.show();
 
-
-        //initializing the side bar
-
-        drawer = new DrawerBuilder().withActionBarDrawerToggle(true).withActivity(this).addDrawerItems(new PrimaryDrawerItem().withIdentifier(1).withName("Logout")).build();
-
         //get the instance of the textview
 
         txtBemvindo = (TextView)findViewById(R.id.txtBemvindo);
         btnAddPontoMapa = (Button)findViewById(R.id.btnAddPontoMapa);
-        btnVerPontosMapa = (Button)findViewById(R.id.btnVerPontosMapa);
+
 
         //get instance of auth
 
@@ -91,8 +86,6 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-
-
         btnAddPontoMapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,12 +94,6 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        btnVerPontosMapa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
 

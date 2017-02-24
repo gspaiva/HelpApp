@@ -2,6 +2,8 @@ package dcc.ufla.br.helpapp;
 
 import android.*;
 import android.Manifest;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -10,8 +12,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,6 +29,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import dcc.ufla.br.helpapp.models.Ponto;
 
 public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -33,6 +49,13 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
     private Button btnAddMeuLocal;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private AlertDialog.Builder builder;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    LayoutInflater inflater;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +75,7 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
                     .build();
         }
 
-
+        builder = new AlertDialog.Builder(HelpMapsActivity.this);
 
     }
 
@@ -63,9 +86,9 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
 
     protected void onStop() {
         mGoogleApiClient.disconnect();
+
         super.onStop();
     }
-
 
 
     @Override
@@ -85,23 +108,61 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
 
             mMap.setMyLocationEnabled(true);
         }
+
+        mRootRef.child("pontos").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ponto : dataSnapshot.getChildren()){
+                    Ponto p = ponto.getValue(Ponto.class);
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(p.getLatitude(),p.getLongitude()))
+                            .title(p.getNome())
+                            .snippet(p.getDescricao()));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        //last location
+
 
 
         final MarkerOptions markerUser = new MarkerOptions();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng latLng) {
-                mMap.addMarker(markerUser.position(latLng).title("Ponto de ajuda"));
+            public void onMapClick(final LatLng latLng) {
+
+                inflater = HelpMapsActivity.this.getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.add_ponto_mapa_dialog,null);
+
+                builder.setView(dialogView).setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final EditText edtAddPontoNome = (EditText)dialogView.findViewById(R.id.edtAddPontoNome);
+                        final EditText edtAddPontoDescricao = (EditText)dialogView.findViewById(R.id.edtAddPontoDescricao);
+                        final Ponto ponto = new Ponto(edtAddPontoNome.getText().toString(),edtAddPontoDescricao.getText().toString(),
+                                latLng.latitude,latLng.longitude);
+
+                        DatabaseReference pontosRef = mRootRef.child("pontos");
+                        pontosRef.push().setValue(ponto).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                mMap.addMarker(new MarkerOptions().position(latLng)
+                                        .title(ponto.getNome())
+                                        .snippet(ponto.getDescricao()));
+                            }
+                        });
+                    }
+                }).create().show();
+
+
             }
         });
 
 
-        // Add a marker in Sydney and move the camera
-        LatLng comp = new LatLng(-21.227878, -44.9807187);
-        mMap.addMarker(new MarkerOptions().position(comp).title("CompJunior"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(comp));
     }
 
     @Override
@@ -115,13 +176,40 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
                     2);
 
         }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         btnAddMeuLocal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mLastLocation != null){
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude())));
+
+                    inflater = HelpMapsActivity.this.getLayoutInflater();
+                    final View dialogView = inflater.inflate(R.layout.add_ponto_mapa_dialog,null);
+
+                    builder.setView(dialogView).setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final EditText edtAddPontoNome = (EditText)dialogView.findViewById(R.id.edtAddPontoNome);
+                            final EditText edtAddPontoDescricao = (EditText)dialogView.findViewById(R.id.edtAddPontoDescricao);
+                            final Ponto ponto = new Ponto(edtAddPontoNome.getText().toString(),edtAddPontoDescricao.getText().toString(),
+                                    mLastLocation.getLatitude(),mLastLocation.getLongitude());
+                            DatabaseReference pontosRef = mRootRef.child("pontos");
+                            pontosRef.push().setValue(ponto).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                    mMap.addMarker(new MarkerOptions().position(new LatLng(ponto.getLatitude(),ponto.getLongitude()))
+                                            .title(ponto.getNome()).snippet(ponto.getDescricao()));
+
+                                }
+                            });
+
+                        }
+                    }).create().show();
+
+
+
+
                 }
             }
         });

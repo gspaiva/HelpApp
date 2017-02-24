@@ -17,5 +17,7 @@
     <string name="txtExpVerMapa">Para ver os locais que tem pessoas necessitadas, clique no botão abaixo</string>
     <string name="btnAddPontoMapa">Adicionar local ao mapa</string>
     <string name="btnVerPontosMapa">Ver locais </string>
+    <string name="txtAddPontoNome">Nome</string>
+    <string name="txtAddPontoDescricao">Descrição</string>
 
 </resources>
