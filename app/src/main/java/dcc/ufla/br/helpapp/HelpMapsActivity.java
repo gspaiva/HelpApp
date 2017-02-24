@@ -207,9 +207,6 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
                         }
                     }).create().show();
 
-
-
-
                 }
             }
         });
