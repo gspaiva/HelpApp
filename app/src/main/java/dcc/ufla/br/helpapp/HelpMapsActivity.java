@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -50,8 +51,6 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private AlertDialog.Builder builder;
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     LayoutInflater inflater;
 
@@ -64,7 +63,11 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         btnAddMeuLocal = (Button)findViewById(R.id.btnAddMeuLocal);
+
+
+
 
         if(mGoogleApiClient == null){
 
@@ -78,19 +81,15 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
         builder = new AlertDialog.Builder(HelpMapsActivity.this);
 
     }
-
     protected void onStart() {
         mGoogleApiClient.connect();
         super.onStart();
     }
-
     protected void onStop() {
         mGoogleApiClient.disconnect();
 
         super.onStop();
     }
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -127,8 +126,6 @@ public class HelpMapsActivity extends FragmentActivity implements OnMapReadyCall
         });
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
-
 
         final MarkerOptions markerUser = new MarkerOptions();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

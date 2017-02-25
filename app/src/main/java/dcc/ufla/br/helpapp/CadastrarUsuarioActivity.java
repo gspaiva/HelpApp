@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,14 +34,14 @@ public class CadastrarUsuarioActivity extends AppCompatActivity{
     private Button btnConfirmarCadastro;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     FirebaseAuth auth;
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_usuario);
 
-        getSupportActionBar().setTitle("Cadastro de usuário");
+
 
 
         //get instance
@@ -54,19 +55,36 @@ public class CadastrarUsuarioActivity extends AppCompatActivity{
         edtEndereco = (EditText)findViewById(R.id.edtEndereco);
         btnConfirmarCadastro = (Button)findViewById(R.id.btnConfirmarCadastro);
 
+
         btnConfirmarCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //validar campos antes de mandar
 
+                if(!Validator.validEmail(edtEmail.getText().toString())){
+                    edtEmail.setError("Seu email está inválido: exemplo@exemplo.com é válido");
+                    return;
+                }
+                if(!Validator.validSenha(edtSenha.getText().toString())){
+                    edtSenha.setError("Sua senha deve ter no mínimo 6 caracteres ...");
+                    return;
+                }
+                if(!Validator.validConfirmaSenha(edtSenha.getText().toString(),edtRepetirSenha.getText().toString())){
+                    edtRepetirSenha.setError("A senhas diferem, verifique sua senha e sua confirmação");
+                    return;
+                }
+
                 final User user = new User(edtNome.getText().toString(),edtEmail.getText().toString(),edtSenha.getText().toString()
                 ,edtEndereco.getText().toString());
 
+                progressDialog = new ProgressDialog(CadastrarUsuarioActivity.this);
+                progressDialog.setMessage("Cadastrando seus dados");
+                progressDialog.show();
                 auth.createUserWithEmailAndPassword(user.email,user.senha).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        progressDialog.dismiss();
                     }
                 }).addOnCompleteListener(CadastrarUsuarioActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -76,6 +94,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity{
                                 usersRef.push().setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
+                                        progressDialog.dismiss();
                                         Toast.makeText(getBaseContext(),"Dados salvos com sucesso" ,Toast.LENGTH_SHORT).show();
                                         Intent i = new Intent(CadastrarUsuarioActivity.this, LoginActivity.class);
                                         startActivity(i);
@@ -84,10 +103,6 @@ public class CadastrarUsuarioActivity extends AppCompatActivity{
                                 });
                             }
                         });
-
-
-
-
 
             }
         });

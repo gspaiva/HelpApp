@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 
 import dcc.ufla.br.helpapp.models.User;
@@ -34,14 +36,18 @@ public class DashboardActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Drawer drawer;
     private Button btnAddPontoMapa;
-
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        getSupportActionBar().setTitle("Painel de controle");
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("Painel de ajuda");
+
+        setSupportActionBar(toolbar);
+
         //iniatilizing the progress dialog
         progressDialog = new ProgressDialog(DashboardActivity.this);
         progressDialog.setMessage("Carregando dados");
@@ -51,6 +57,8 @@ public class DashboardActivity extends AppCompatActivity {
 
         txtBemvindo = (TextView)findViewById(R.id.txtBemvindo);
         btnAddPontoMapa = (Button)findViewById(R.id.btnAddPontoMapa);
+
+
 
 
         //get instance of auth
@@ -94,7 +102,25 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+        drawer = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .addDrawerItems(new PrimaryDrawerItem().withName("Logout").withIdentifier(1))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
+                        if(drawerItem.getIdentifier() == 1){
+                            FirebaseAuth.getInstance().signOut();
+                            Intent i = new Intent(DashboardActivity.this,LoginActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+
+                        return true;
+                    }
+                })
+                .build();
 
 
     }

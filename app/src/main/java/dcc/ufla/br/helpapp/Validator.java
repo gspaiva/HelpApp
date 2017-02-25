@@ -34,4 +34,10 @@ public class Validator {
 
         return false;
     }
+    public static boolean validConfirmaSenha(String senha, String confirmaSenha){
+        if(senha.equals(confirmaSenha)){
+            return true;
+        }
+        return false;
+    }
 }

@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="dcc.ufla.br.helpapp.HelpMapsActivity" >
-
         <Button
             android:paddingTop="15dp"
             android:layout_width="150dp"
